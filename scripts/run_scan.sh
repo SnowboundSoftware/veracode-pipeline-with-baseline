@@ -15,55 +15,56 @@ then
 fi
 
 echo "Executing Pipeline Scan with the following parameters:"
-echo "\t-vid *** -vkey ***"
-echo "\t-f ${INPUT_FILENAME}"
+echo "-vid *** -vkey ***"
+echo "-f ${INPUT_FILENAME}"
 
 # Check optional parameters, and set commands
 results=''
 if [ -n "${INPUT_RESULTS}" ]
 then
     results="--json_output_file ${INPUT_RESULTS}"
-    echo "\t${results}"
+    echo "${results}"
 fi
 
 baseline=''
 if [ -n "${INPUT_BASELINE}" ] && [ -f "${INPUT_BASELINE}" ]
 then
     baseline="--baseline_file ${INPUT_BASELINE}"
-    echo "\t${baseline}"
+    echo "${baseline}"
 fi
 
 timeout=''
 if [ -n "${INPUT_TIMEOUT}" ]
 then
     timeout="--timeout ${INPUT_TIMEOUT}"
-    echo "\t${timeout}"
+    echo "${timeout}"
 fi
 
 severity=''
 if [ -n "${INPUT_SEVERITY}" ]
 then
     severity="--fail_on_severity=\"${INPUT_SEVERITY}\""
-    echo "\t${severity}"
+    echo "${severity}"
 fi
 
 cwe=''
 if [ -n "${INPUT_CWE}" ]
 then
     cwe="--fail_on_cwe=\"${INPUT_CWE}\""
-    echo "\t${cwe}"
+    echo "${cwe}"
 fi
 
 appid=''
 if [ -n "${INPUT_APPID}" ]
 then
     appid="-aid ${INPUT_APPID}"
-    echo "\t${appid}"
+    echo "${appid}"
 fi
 
 # Run Veracode pipeline scan
+set -x
 java -jar pipeline-scan.jar -vid "${INPUT_VID}" -vkey "${INPUT_VKEY}" -f "${INPUT_FILENAME}" \
-    "${severity}" "${cwe}" "${timeout}" "${appid}" "${results}" "${baseline}" 
+    "${severity}" "${cwe}" "${timeout}" "${appid}" "${results}" "${baseline}"
 
 # Save return code for optional exit status
 ret=$?

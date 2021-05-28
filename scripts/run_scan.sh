@@ -22,12 +22,12 @@ optional_args=()
 # Check optional parameters, and set commands
 if [ -n "${INPUT_RESULTS}" ]
 then
-    optional_args+=( --json_output_file \""${INPUT_RESULTS}"\" )
+    optional_args+=( --json_output_file "${INPUT_RESULTS}" )
 fi
 
 if [ -n "${INPUT_BASELINE}" ] && [ -f "${INPUT_BASELINE}" ]
 then
-    optional_args+=( --baseline_file \""${INPUT_BASELINE}"\" )
+    optional_args+=( --baseline_file "${INPUT_BASELINE}" )
 fi
 
 if [ -n "${INPUT_TIMEOUT}" ] && [[ ${INPUT_TIMEOUT} =~ ${num} ]]
@@ -37,12 +37,12 @@ fi
 
 if [ -n "${INPUT_SEVERITY}" ]
 then
-    optional_args+=( --fail_on_severity=\""${INPUT_SEVERITY}"\" )
+    optional_args+=( --fail_on_severity="${INPUT_SEVERITY}" )
 fi
 
 if [ -n "${INPUT_CWE}" ]
 then
-    optional_args+=( --fail_on_cwe=\""${INPUT_CWE}"\" )
+    optional_args+=( --fail_on_cwe="${INPUT_CWE}" )
 fi
 
 if [ -n "${INPUT_APPID}" ] && [[ ${INPUT_APPID} =~ ${num} ]]

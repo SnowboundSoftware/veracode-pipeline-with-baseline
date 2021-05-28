@@ -61,6 +61,7 @@ run_scan:
   runs-on: ubuntu-latest
   steps:
     - name: Fetch Baseline File
+      continue-on-error: true
       uses: actions/download-artifact@v2
       with:
         name: veracode-baseline

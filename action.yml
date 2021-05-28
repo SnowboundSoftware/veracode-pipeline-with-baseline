@@ -1,5 +1,8 @@
 name: 'Veracode Pipeline Scan with Baseline'
 description: 'Perform a Veracode Pipeline Scan, comparing the results against the provided baseline file'
+branding:
+  icon: 'fast-forward'
+  color: 'blue'
 inputs:
   vid:
     description: 'Veracode API ID'

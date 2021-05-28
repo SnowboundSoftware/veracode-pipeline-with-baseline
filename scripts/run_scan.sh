@@ -17,56 +17,45 @@ then
     exit 1
 fi
 
-echo "Executing Pipeline Scan with the following parameters:"
-echo "-vid *** -vkey ***"
-echo "-f ${INPUT_FILENAME}"
+optional_args=()
 
 # Check optional parameters, and set commands
-results=''
 if [ -n "${INPUT_RESULTS}" ]
 then
-    results="--json_output_file \"${INPUT_RESULTS}\""
-    echo "${results}"
+    optional_args+=( --json_output_file \""${INPUT_RESULTS}"\" )
 fi
 
-baseline=''
 if [ -n "${INPUT_BASELINE}" ] && [ -f "${INPUT_BASELINE}" ]
 then
-    baseline="--baseline_file \"${INPUT_BASELINE}\""
-    echo "${baseline}"
+    optional_args+=( --baseline_file \""${INPUT_BASELINE}"\" )
 fi
 
-timeout=''
 if [ -n "${INPUT_TIMEOUT}" ] && [[ ${INPUT_TIMEOUT} =~ ${num} ]]
 then
-    timeout="--timeout ${INPUT_TIMEOUT}"
-    echo "${timeout}"
+    optional_args+=( --timeout "${INPUT_TIMEOUT}" )
 fi
 
-severity=''
 if [ -n "${INPUT_SEVERITY}" ]
 then
-    severity="--fail_on_severity=\"${INPUT_SEVERITY}\""
-    echo "${severity}"
+    optional_args+=( --fail_on_severity=\""${INPUT_SEVERITY}"\" )
 fi
 
-cwe=''
 if [ -n "${INPUT_CWE}" ]
 then
-    cwe="--fail_on_cwe=\"${INPUT_CWE}\""
-    echo "${cwe}"
+    optional_args+=( --fail_on_cwe=\""${INPUT_CWE}"\" )
 fi
 
-appid=''
 if [ -n "${INPUT_APPID}" ] && [[ ${INPUT_APPID} =~ ${num} ]]
 then
-    appid="-aid ${INPUT_APPID}"
-    echo "${appid}"
+    optional_args+=( -aid "${INPUT_APPID}" )
 fi
+
+echo "Executing Pipeline Scan with the following optional parameters:"
+echo "${optional_args[@]}"
 
 # Run Veracode pipeline scan
 set -x
-java -jar pipeline-scan.jar -vid "${INPUT_VID}" -vkey "${INPUT_VKEY}" -f "${INPUT_FILENAME}" ${severity} ${cwe} ${timeout} ${appid} ${results} ${baseline}
+java -jar pipeline-scan.jar -vid "${INPUT_VID}" -vkey "${INPUT_VKEY}" -f "${INPUT_FILENAME}" "${optional_args[@]}"
 
 # Save return code for optional exit status
 ret=$?

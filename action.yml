@@ -1,0 +1,51 @@
+name: 'Veracode Pipeline Scan with Baseline'
+description: 'Perform a Veracode Pipeline Scan, comparing the results against the provided baseline file'
+inputs:
+  vid:
+    description: 'Veracode API ID'
+    required: true
+  vkey:
+    description: 'Veracode API Secret Key'
+    required: true
+  filename:
+    description: 'Filepath of the file to scan'
+    required: true
+  results:
+    description: 'Filename of the where to save JSON results'
+    default: 'results.json'
+    required: false
+  baseline:
+    description: 'Filename of the baseline results JSON file'
+    default: 'baseline.json'
+    required: false
+  timeout:
+    description: 'The number of minutes to wait before failing the job'
+    default: '60'
+    required: false
+  severity:
+    description: 'The severities that will fail this run'
+    default: 'Very High, High'
+    required: false
+  cwe:
+    description: 'The CWEs that will fail this run. Default (empty) is all CWEs'
+    default: ''
+    required: false
+  appid:
+    description: 'The Veracode Platform application ID for reporting purposes'
+    default: ''
+    required: false
+  allowfail:
+    description: 'Set to false to prevent the scan results from ever failing the job'
+    default: 'true'
+    required: false
+runs:
+  using: 'composite'
+  steps:
+    - run: curl -s -O https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
+      name: 'Download latest pipeline scan artifact'
+      shell: bash
+    - run: unzip -o pipeline-scan-LATEST.zip
+      shell: bash
+    - run: ${{ github.action_path }}/scripts/run_scan.sh
+      name: 'Run Veracode pipeline scan'
+      shell: bash

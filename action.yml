@@ -52,3 +52,14 @@ runs:
     - run: ${{ github.action_path }}/scripts/run_scan.sh
       name: 'Run Veracode pipeline scan'
       shell: bash
+      env:
+        INPUT_VID: ${{ inputs.vid }}
+        INPUT_VKEY: ${{ inputs.vkey }}
+        INPUT_FILENAME: ${{ inputs.filename }}
+        INPUT_RESULTS: ${{ inputs.results }}
+        INPUT_BASELINE: ${{ inputs.baseline }}
+        INPUT_TIMEOUT: ${{ inputs.timeout }}
+        INPUT_SEVERITY: ${{ inputs.severity }}
+        INPUT_CWE: ${{ inputs.cwe }}
+        INPUT_APPID: ${{ inputs.appid }}
+        INPUT_ALLOWFAIL: ${{ inputs.allowfail }}

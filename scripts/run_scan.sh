@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e
 
+# Number regex
+num='^[0-9]+$'
+
 # Check for required values
 if [ -z "${INPUT_VID}" ] || [ -z "${INPUT_VKEY}" ]
 then
@@ -8,7 +11,7 @@ then
     exit 1
 fi
 
-if [ -z "${INPUT_FILENAME}" ]
+if [ -z "${INPUT_FILENAME}" ] && [ -f "${INPUT_FILENAME}" ]
 then
     echo 'A file must be provided to scan!'
     exit 1
@@ -22,19 +25,19 @@ echo "-f ${INPUT_FILENAME}"
 results=''
 if [ -n "${INPUT_RESULTS}" ]
 then
-    results="--json_output_file ${INPUT_RESULTS}"
+    results="--json_output_file \"${INPUT_RESULTS}\""
     echo "${results}"
 fi
 
 baseline=''
 if [ -n "${INPUT_BASELINE}" ] && [ -f "${INPUT_BASELINE}" ]
 then
-    baseline="--baseline_file ${INPUT_BASELINE}"
+    baseline="--baseline_file \"${INPUT_BASELINE}\""
     echo "${baseline}"
 fi
 
 timeout=''
-if [ -n "${INPUT_TIMEOUT}" ]
+if [ -n "${INPUT_TIMEOUT}" ] && [[ ${INPUT_TIMEOUT} =~ ${num} ]]
 then
     timeout="--timeout ${INPUT_TIMEOUT}"
     echo "${timeout}"
@@ -55,7 +58,7 @@ then
 fi
 
 appid=''
-if [ -n "${INPUT_APPID}" ]
+if [ -n "${INPUT_APPID}" ] && [[ ${INPUT_APPID} =~ ${num} ]]
 then
     appid="-aid ${INPUT_APPID}"
     echo "${appid}"
@@ -63,8 +66,7 @@ fi
 
 # Run Veracode pipeline scan
 set -x
-java -jar pipeline-scan.jar -vid "${INPUT_VID}" -vkey "${INPUT_VKEY}" -f "${INPUT_FILENAME}" \
-    "${severity}" "${cwe}" "${timeout}" "${appid}" "${results}" "${baseline}"
+java -jar pipeline-scan.jar -vid "${INPUT_VID}" -vkey "${INPUT_VKEY}" -f "${INPUT_FILENAME}" ${severity} ${cwe} ${timeout} ${appid} ${results} ${baseline}
 
 # Save return code for optional exit status
 ret=$?

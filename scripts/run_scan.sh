@@ -1,4 +1,7 @@
-#!/bin/sh -l
+#!/bin/bash
+set -e
+
+echo "INPUT_FILENAME: ${INPUT_FILENAME}"
 
 # Check for required values
 if [ -z "${INPUT_VID}" ] || [ -z "${INPUT_VKEY}" ]

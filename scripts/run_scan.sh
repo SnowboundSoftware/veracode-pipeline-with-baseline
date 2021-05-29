@@ -54,7 +54,6 @@ echo "Executing Pipeline Scan with the following optional parameters:"
 echo "${optional_args[@]}"
 
 # Run Veracode pipeline scan
-set -x
 java -jar pipeline-scan.jar -vid "${INPUT_VID}" -vkey "${INPUT_VKEY}" -f "${INPUT_FILENAME}" "${optional_args[@]}"
 
 # Save return code for optional exit status

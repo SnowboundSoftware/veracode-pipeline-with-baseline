@@ -40,7 +40,7 @@ This example does not compare with any baseline scan.
 _Note: an error with the scan will still cause a job failure._
 
 ```yaml
-- uses: runkalicious/veracode-pipeline-with-baseline@main
+- uses: SnowboundSoftware/veracode-pipeline-with-baseline@latest
   continue-on-error: false
   with:
     vid: ${{ secrets.VERACODE_API_ID }}
@@ -66,7 +66,7 @@ run_scan:
       with:
         name: veracode-baseline
     - name: Run Scan and Compare with Baseline
-      uses: runkalicious/veracode-pipeline-with-baseline@main
+      uses: SnowboundSoftware/veracode-pipeline-with-baseline@latest
       continue-on-error: false
       with:
         vid: ${{ secrets.VERACODE_API_ID }}

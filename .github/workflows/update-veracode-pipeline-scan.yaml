@@ -1,0 +1,44 @@
+name: Update Veracode Pipeline Scan Tool
+
+on:
+  schedule:
+    # Every day at midnight
+    # https://crontab.guru/#0_0_*_*_*
+    - cron: "0 0 * * *"
+  
+  # Allow manual trigger
+  workflow_dispatch:
+
+  # Whenever something is pushed into main
+  push:
+
+jobs:
+  build:
+    name: Update
+    # We rely on GitHub's Ubuntu 20.04 LTS image
+    # https://github.com/actions/virtual-environments/
+    runs-on: ubuntu-20.04
+
+    # Build steps
+    steps:
+      # Check out the git repository
+      # https://github.com/actions/checkout#usage
+      - name: Checking out git repository
+        uses: actions/checkout@v2
+
+      # Download the latest pipeline-scan tool
+      - name: Download pipeline-scan-LATEST.zip from Veracode
+        run: |
+          curl -O https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
+          git config user.name "Snowbound GitHub Actions Bot"
+          git config user.email "<>"
+          if [[ `git status` == *"nothing to commit"* ]]; then echo No changes && echo "PUBLISH=false" >> $GITHUB_ENV; else git commit -am "Update pipeline-scan-LATEST.zip" && git push && echo "PUBLISH=true" >> $GITHUB_ENV; fi
+
+      - name: "Publish"
+        if: env.PUBLISH == 'true'
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: false
+          automatic_release_tag: "latest"
+          title: "Latest Update"

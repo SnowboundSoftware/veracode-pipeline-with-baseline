@@ -44,9 +44,6 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - run: curl -s -O https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
-      name: 'Download latest pipeline scan artifact'
-      shell: bash
     - run: unzip -o pipeline-scan-LATEST.zip
       shell: bash
     - run: ${{ github.action_path }}/scripts/run_scan.sh

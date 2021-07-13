@@ -44,7 +44,7 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - run: unzip -o pipeline-scan-LATEST.zip
+    - run: unzip -o ${{ github.action_path }}/pipeline-scan-LATEST.zip
       shell: bash
     - run: ${{ github.action_path }}/scripts/run_scan.sh
       name: 'Run Veracode pipeline scan'

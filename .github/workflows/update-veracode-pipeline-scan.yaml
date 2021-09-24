@@ -42,7 +42,7 @@ jobs:
       - name: Set deploy
         if: (github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true) || github.event_name == 'workflow_dispatch'
         run: |
-          echo "PUBLISH=true"" >> $GITHUB_ENV
+          echo "PUBLISH=true" >> $GITHUB_ENV
       
       - name: "Publish"
         if: env.PUBLISH == 'true'

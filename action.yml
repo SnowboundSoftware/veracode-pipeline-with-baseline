@@ -46,6 +46,8 @@ runs:
   steps:
     - run: unzip -o ${{ github.action_path }}/pipeline-scan-LATEST.zip
       shell: bash
+    - run: cp ${{ github.action_path }}/veracodeJsonToMd.jar .
+      shell: bash
     - run: ${{ github.action_path }}/scripts/run_scan.sh
       name: 'Run Veracode pipeline scan'
       shell: bash
@@ -60,3 +62,6 @@ runs:
         INPUT_CWE: ${{ inputs.cwe }}
         INPUT_APPID: ${{ inputs.appid }}
         INPUT_ALLOWFAIL: ${{ inputs.allowfail }}
+    - run: java -jar veracodeJsonToMd.jar -i results.json -o results.md
+      name: 'Convert Veracode JSON to MD'
+      shell: bash

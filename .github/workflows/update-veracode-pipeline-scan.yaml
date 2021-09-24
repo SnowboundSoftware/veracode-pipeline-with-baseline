@@ -8,7 +8,7 @@ on:
   
   # Allow manual trigger
   workflow_dispatch:
-  
+
   pull_request:
     types: [opened, closed, edited, reopened, synchronize]
   
@@ -37,7 +37,7 @@ jobs:
       # If this is a closing PR, do the build anyways
       - name: Set deploy
         if: (github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true) || github.event_name == 'workflow_dispatch'
-        run:
+        run: |
           echo "PUBLISH=true"" >> $GITHUB_ENV
       
       - name: "Publish"

@@ -18,7 +18,11 @@ jobs:
     # We rely on GitHub's Ubuntu 20.04 LTS image
     # https://github.com/actions/virtual-environments/
     runs-on: ubuntu-20.04
-
+    
+    env:
+      # A closing PR or workflow_dispatch will change this to true
+      PUBLISH: false
+    
     # Build steps
     steps:
       # Check out the git repository

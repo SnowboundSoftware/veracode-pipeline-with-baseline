@@ -8,10 +8,10 @@ on:
   
   # Allow manual trigger
   workflow_dispatch:
-
-  # Whenever something is pushed into main
-  push:
-
+  
+  pull_request:
+    types: [opened, closed, edited, reopened, synchronize]
+  
 jobs:
   build:
     name: Update

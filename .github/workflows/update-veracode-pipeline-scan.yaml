@@ -8,10 +8,10 @@ on:
   
   # Allow manual trigger
   workflow_dispatch:
-
-  # Whenever something is pushed into main
-  push:
-
+  
+  pull_request:
+    types: [opened, closed, edited, reopened, synchronize]
+  
 jobs:
   build:
     name: Update
@@ -33,7 +33,13 @@ jobs:
           git config user.name "Snowbound GitHub Actions Bot"
           git config user.email "<>"
           if [[ `git status` == *"nothing to commit"* ]]; then echo No changes && echo "PUBLISH=false" >> $GITHUB_ENV; else git commit -am "Update pipeline-scan-LATEST.zip" && git push && echo "PUBLISH=true" >> $GITHUB_ENV; fi
-
+      
+      # If this is a closing PR, do the build anyways
+      - name: Set deploy
+        if: (github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true) || github.event_name == 'workflow_dispatch'
+        run:
+          echo "PUBLISH=true"" >> $GITHUB_ENV
+      
       - name: "Publish"
         if: env.PUBLISH == 'true'
         uses: "marvinpinto/action-automatic-releases@latest"

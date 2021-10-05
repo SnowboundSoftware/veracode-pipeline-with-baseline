@@ -1,4 +1,5 @@
 #!/bin/bash
+# Halt on error
 set -e
 
 # Number regex
@@ -52,6 +53,12 @@ fi
 
 echo "Executing Pipeline Scan with the following optional parameters:"
 echo "${optional_args[@]}"
+
+# Make sure Java is installed
+java -version
+
+# Disable halt on error
+set +e
 
 # Run Veracode pipeline scan
 java -jar pipeline-scan.jar -vid "${INPUT_VID}" -vkey "${INPUT_VKEY}" -f "${INPUT_FILENAME}" "${optional_args[@]}"

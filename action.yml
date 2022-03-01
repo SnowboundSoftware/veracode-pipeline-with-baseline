@@ -41,6 +41,10 @@ inputs:
     description: 'Set to false to prevent the scan results from ever failing the job'
     default: 'true'
     required: false
+  annotate:
+    description: 'Set to false to prevent GitHub Actions annotations'
+    default: 'true'
+    required: false
 runs:
   using: 'composite'
   steps:
@@ -48,6 +52,8 @@ runs:
       shell: bash
     - run: cp ${{ github.action_path }}/veracodeJsonToMd.jar .
       shell: bash
+    - run: cp ${{ github.action_path }}/veracodeJsonToGhAnnotations.sh .
+        shell: bash
     - run: ${{ github.action_path }}/scripts/run_scan.sh
       name: 'Run Veracode pipeline scan'
       shell: bash
@@ -62,6 +68,10 @@ runs:
         INPUT_CWE: ${{ inputs.cwe }}
         INPUT_APPID: ${{ inputs.appid }}
         INPUT_ALLOWFAIL: ${{ inputs.allowfail }}
+    - run: ./veracodeJsonToGhAnnotations.sh
+      if: inputs.annotate == true
+      name: 'Annotate GitHub Actions'
+      shell: bash
     - run: java -jar veracodeJsonToMd.jar -i results.json -o results.md
       name: 'Convert Veracode JSON to MD'
       shell: bash
